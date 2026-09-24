@@ -1,28 +1,28 @@
 @echo off
+setlocal
 echo ==============================================
-echo   Initializing Git and Committing Project
+echo   Publishing Project to GitHub with GitHub CLI
 echo ==============================================
 echo.
 
-git init -b main
-git add .
-git commit -m "Initial commit"
+set "PATH=%PATH%;C:\Program Files\GitHub CLI;C:\Users\shour\AppData\Local\Programs\Git\cmd"
 
-echo.
-echo ==============================================
-echo   Local Git setup is complete!
-echo ==============================================
-echo.
-set /p REPO_URL="Paste your GitHub repository URL (or press Enter to skip): "
+echo Enter a name for your new GitHub repository:
+set /p REPO_NAME="Repository Name (e.g., my-project): "
 
-if not "%REPO_URL%"=="" (
-    git remote remove origin 2>nul
-    git remote add origin %REPO_URL%
-    git branch -M main
-    git push -u origin main
-    echo.
-    echo Pushed successfully to %REPO_URL%!
+if "%REPO_NAME%"=="" (
+    set REPO_NAME=my-new-project
 )
 
+echo.
+echo Creating repository "%REPO_NAME%" on your GitHub account and pushing...
+echo.
+
+gh repo create %REPO_NAME% --public --source=. --remote=origin --push
+
+echo.
+echo ==============================================
+echo Done! Your project is now live on GitHub!
+echo ==============================================
 echo.
 pause
